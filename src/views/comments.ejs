@@ -1,0 +1,120 @@
+<section id="app">
+  <a href="/"><- Voltar</a><br>
+  <h1>{{post.Title}}</h1>
+  <p>{{post.Content}}</p>
+  <br>
+  <h3>Comentários</h3>
+  <ul>
+    <!-- Utilize looping v-for do VueJs para exibir os comentários (título e conteúdo) de forma dinâmica -->
+
+    <li v-for="comments in comments">
+      {{ comments.UserName }} - {{ comments.Comment }}
+    </li>
+
+    <form @submit.prevent="createComment" >
+      <span>Name</span><br>
+      <input
+              v-model="UserName"
+              type="text"
+              placeholder="Enter your name"
+      /><br>
+      <span>Your comment</span><br>
+      <input
+              v-model="Comment"
+              type="comment"
+              placeholder="Enter your comment"
+      /><br>
+      <input
+              class="submit"
+              type="submit"
+              value="Submit"
+      >
+    </form>
+  </ul>
+
+</section>
+<script>
+  var http = axios.create({
+    baseURL: "<%- apiUrl%>",
+    timeout: 10000,
+  });
+  const postId = "<%- postId %>"
+
+  var app = new Vue({
+    el: "#app",
+    data: {
+      post: {},
+      comments: [],
+      Comment: '',
+      UserName: '',
+      PostId: ''
+    },
+    methods: {
+      loadPost() {
+        http.get("/posts/" + postId).then((response) => {
+          this.post = response.data;
+        });
+      },
+      loadComments() {
+        http.get(`/comments/${postId}`).then((response) => {
+          console.log(response.data)
+          this.comments = response.data;
+          this.PostId = postId
+        });
+      },
+      createComment() {
+        console.log(`layer-view, CreateComment Comment: ${this.Comment} UserName: ${this.UserName} PostId: ${this.PostId}`)
+        http.post(`/comments/addComment`,{
+          UserName: this.UserName,
+          Comment: this.Comment,
+          PostId: this.PostId
+        }).then((response) => {
+          http.get(`/comments/${postId}`).then((response) => {
+            console.log(response.data)
+            this.comments = response.data;
+            this.UserName = ''
+            this.Comment = ''
+          });
+        }).catch((error)=>{
+          console.log(`error: ${error}`)
+          alert('input error, try later')
+        })
+
+      }
+    },
+    mounted() {
+      this.loadPost();
+      this.loadComments()
+    },
+  });
+</script>
+<style>
+  form {
+    padding: 10px;
+    border: 2px solid black;
+    border-radius: 5px;
+  }
+
+  input {
+    padding: 4px 8px;
+    margin: 4px;
+  }
+
+  span {
+    font-size: 18px;
+    margin: 4px;
+    font-weight: 500;
+  }
+
+  .submit {
+    font-size: 15px;
+    color: #fff;
+    background: #222;
+    padding: 6px 12px;
+    border: none;
+    margin-top: 8px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+</style>
