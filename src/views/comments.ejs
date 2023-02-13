@@ -5,7 +5,6 @@
   <br>
   <h3>Comentários</h3>
   <ul>
-    <!-- Utilize looping v-for do VueJs para exibir os comentários (título e conteúdo) de forma dinâmica -->
 
     <li v-for="comments in comments">
       {{ comments.UserName }} - {{ comments.Comment }}
@@ -34,7 +33,6 @@
 
 </section>
 <script>
-  import Logger from "../util/logger";
 
   var http = axios.create({
     baseURL: "<%- apiUrl%>",
@@ -59,26 +57,22 @@
       },
       loadComments() {
         http.get(`/comments/${postId}`).then((response) => {
-          Logger.info(response.data)
           this.comments = response.data;
           this.PostId = postId
         });
       },
       createComment() {
-        Logger.info(`layer-view, CreateComment Comment: ${this.Comment} UserName: ${this.UserName} PostId: ${this.PostId}`)
         http.post(`/comments/addComment`,{
           UserName: this.UserName,
           Comment: this.Comment,
           PostId: this.PostId
         }).then((response) => {
           http.get(`/comments/${postId}`).then((response) => {
-            Logger.info(response.data)
             this.comments = response.data;
             this.UserName = ''
             this.Comment = ''
           });
         }).catch((error)=>{
-          Logger.error(`error: ${error}`)
           alert('input error, try later')
         })
 
