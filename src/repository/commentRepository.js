@@ -1,8 +1,9 @@
 const database = require('../config/database')
+const Logger = require("../util/logger");
 
 module.exports = class CommentRepository {
   static async listByPostId (postId) {
-    console.log(`layer-Repository, postId: ${postId}`)
+    Logger.info(`layer-Repository, postId: ${postId}`)
     const result = await database
       .select(
         'Id',
@@ -14,12 +15,12 @@ module.exports = class CommentRepository {
       )
       .from('Comments')
       .where('PostId', postId)
-    console.log(`layer-Repository, postId: ${JSON.stringify(result)}`)
+    Logger.info(`layer-Repository, postId: ${JSON.stringify(result)}`)
     return result
   }
 
   static async create (PostId, UserName, Comment) {
-    console.log(`layer-Repository, PostId: ${PostId},UserName: ${UserName},Comment: ${Comment}`)
+    Logger.info(`layer-Repository, PostId: ${PostId},UserName: ${UserName},Comment: ${Comment}`)
     const result = await database
       .insert({
         PostId,
@@ -27,7 +28,7 @@ module.exports = class CommentRepository {
         Comment
       })
       .into('Comments')
-    console.log(`layer-Repository, postId: ${JSON.stringify(result)}`)
+    Logger.info(`layer-Repository, postId: ${JSON.stringify(result)}`)
     return result
   }
 }

@@ -34,6 +34,8 @@
 
 </section>
 <script>
+  import Logger from "../util/logger";
+
   var http = axios.create({
     baseURL: "<%- apiUrl%>",
     timeout: 10000,
@@ -57,26 +59,26 @@
       },
       loadComments() {
         http.get(`/comments/${postId}`).then((response) => {
-          console.log(response.data)
+          Logger.info(response.data)
           this.comments = response.data;
           this.PostId = postId
         });
       },
       createComment() {
-        console.log(`layer-view, CreateComment Comment: ${this.Comment} UserName: ${this.UserName} PostId: ${this.PostId}`)
+        Logger.info(`layer-view, CreateComment Comment: ${this.Comment} UserName: ${this.UserName} PostId: ${this.PostId}`)
         http.post(`/comments/addComment`,{
           UserName: this.UserName,
           Comment: this.Comment,
           PostId: this.PostId
         }).then((response) => {
           http.get(`/comments/${postId}`).then((response) => {
-            console.log(response.data)
+            Logger.info(response.data)
             this.comments = response.data;
             this.UserName = ''
             this.Comment = ''
           });
         }).catch((error)=>{
-          console.log(`error: ${error}`)
+          Logger.error(`error: ${error}`)
           alert('input error, try later')
         })
 
