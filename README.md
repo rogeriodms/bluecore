@@ -1,4 +1,4 @@
-# Teste Técnico de Desenvolvedor Bluecore.it
+# Teste Técnico de Desenvolvimento
 
 ### Explicação
 Esta é uma aplicação que simula um blog, nela existem duas páginas, a inicial que contêm a lista de posts cadastrados, e a segunda tela é a de detalhes do post aonde é exibido o conteúdo e também os comentários relacionados a aquele post. Mas a aplicação se encontra incompleta, restando ainda realizar a listagem dos comentários dentro da página de detalhes do post, e essa será a sua missão neste projeto.
